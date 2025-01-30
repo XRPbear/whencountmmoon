@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>XRP Countdown</title>
+<style>
+body {
+  background-color: #1e3d5b;
+  color: black;
+  font-family: sans-serif;
+  overflow: hidden;
+  margin: 0;
+}
+
+#countdown {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 4em;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.xrp {
+  position: absolute;
+  font-size: 2em;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+
+<div id="countdown"></div>
+
+<script>
+// Countdown timer (remains the same)
+const countdownDisplay = document.getElementById('countdown');
+const targetDateUTC = Date.UTC(2025, 3, 20, 0, 0, 0); // March 20, 2025
+
+function updateCountdown() {
+  const nowUTC = Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate(), new Date().getUTCHours(), new Date().getUTCMinutes(), new Date().getUTCSeconds());
+  const timeLeft = targetDateUTC - nowUTC;
+
+  if (timeLeft <= 0) {
+    countdownDisplay.textContent = "It's XRP Day!";
+    clearInterval(countdownInterval);
+    return;
+  }
+
+  const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+  countdownDisplay.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+}
+
+updateCountdown();
+const countdownInterval = setInterval(updateCountdown, 1000);
+
+
+
+// XRP Bouncing Text (REWRITTEN)
+const numXRPs = 589;  // Adjust as needed
+const xrpElements = [];
+
+for (let i = 0; i < numXRPs; i++) {
+  const xrp = document.createElement('div');
+  xrp.className = 'xrp';
+  xrp.textContent = 'XRP';
+
+  // Initial random position and velocity
+  xrp.x = Math.random() * (window.innerWidth - xrp.offsetWidth); // Corrected range
+  xrp.y = Math.random() * (window.innerHeight - xrp.offsetHeight); // Corrected range
+  xrp.dx = (Math.random() - 0.5) * 5; // Adjust speed here
+  xrp.dy = (Math.random() - 0.5) * 5;
+
+  xrp.style.left = xrp.x + 'px';
+  xrp.style.top = xrp.y + 'px';
+
+  xrpElements.push(xrp);
+  document.body.appendChild(xrp);
+}
+
+function animateXRP() {
+  for (let i = 0; i < numXRPs; i++) {
+    const xrp = xrpElements[i];
+
+    xrp.x += xrp.dx;
+    xrp.y += xrp.dy;
+
+    // Bounce off walls (DVD-style) - Corrected collision detection
+    if (xrp.x + xrp.offsetWidth > window.innerWidth || xrp.x < 0) {
+      xrp.dx = -xrp.dx;
+    }
+    if (xrp.y + xrp.offsetHeight > window.innerHeight || xrp.y < 0) {
+      xrp.dy = -xrp.dy;
+    }
+
+    xrp.style.left = xrp.x + 'px';
+    xrp.style.top = xrp.y + 'px';
+  }
+  requestAnimationFrame(animateXRP);
+}
+
+animateXRP(); // Start the animation
+
+</script>
+
+</body>
+</html>
